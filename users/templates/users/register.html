@@ -1,0 +1,15 @@
+{% extends "helpdeskside/base.html" %}
+
+{% load static %}
+{% block content %}
+
+<div class="register-page">
+    <h2 class="register-title">Регистрация</h2>
+    <form method="post" class="register-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="register-btn">Создать</button>
+    </form>
+</div>
+
+{% endblock %}

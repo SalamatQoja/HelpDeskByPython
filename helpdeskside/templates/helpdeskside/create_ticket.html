@@ -1,0 +1,16 @@
+{% extends "helpdeskside/base.html" %}
+
+{% load static%}
+{% block content %}
+
+<div class="create-ticket-side">
+    <h2 class="create-title"><img src="/static/images/pencil.png" class="create-pencil">Создать заявку</h2>
+    <hr style="width: 90%">
+    <form method="post" class="create-ticket-inner">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="create-btn">Сохранить</button>
+    </form>
+</div>
+
+{% endblock %}
