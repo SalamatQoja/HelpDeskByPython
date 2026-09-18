@@ -1,0 +1,46 @@
+{% extends "helpdeskside/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="manage-users-page">
+    <h2>Управление пользователями</h2>
+
+    <table class="users-table">
+        <thead>
+        <tr>
+            <th>Логин</th>
+            <th>Email</th>
+            <th>Текущая роль</th>
+            <th>Изменить роль</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.get_role_display }}</td>
+            <td>
+                <form method="post" action="{% url 'users:change_user_role' u.id %}">
+                    {% csrf_token %}
+                    <select name="role">
+                        {% for value, label in u.Roles.choices %}
+                        <option value="{{ value }}" {% if u.role== value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Сохранить</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">Пользователей пока нет</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

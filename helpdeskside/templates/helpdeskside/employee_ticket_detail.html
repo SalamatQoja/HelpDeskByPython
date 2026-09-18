@@ -1,0 +1,39 @@
+{% extends "helpdeskside/base.html" %}
+{% load static %}
+{% block content %}
+
+<h2>Заявка #{{ ticket.pk }}</h2>
+<p><strong>Статус:</strong> {{ ticket.get_status_display }}</p>
+<p><strong>Приоритет:</strong> {{ ticket.get_priority_display }}</p>
+<p><strong>Описание:</strong> {{ ticket.description }}</p>
+<p><strong>Создана:</strong> {{ ticket.created|date:"d.m.Y H:i" }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <select name="status">
+        {% for value, label in ticket.Status.choices %}
+        <option value="{{ value }}" {% if ticket.status== value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="priority">
+        {% for value, label in ticket.Priority.choices %}
+        <option value="{{ value }}" {% if ticket.priority== value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Сохранить</button>
+</form>
+
+<h3>Комментарии</h3>
+{% for c in comments %}
+<p><strong>{{ c.author }}:</strong> {{ c.text }} <small>{{ c.created_at|date:"d.m.Y H:i" }}</small></p>
+{% endfor %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Добавить комментарий</button>
+</form>
+
+{% endblock %}

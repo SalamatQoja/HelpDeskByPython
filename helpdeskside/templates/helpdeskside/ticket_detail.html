@@ -1,11 +1,35 @@
 {% extends "helpdeskside/base.html" %}
 
 {% block content %}
-<h2>Редактировать заявку</h2>
+<h2>{{ ticket.title }}</h2>
 
+<p><strong>Статус:</strong> {{ ticket.get_status_display }}</p>
+<p><strong>Приоритет:</strong> {{ ticket.get_priority_display }}</p>
+<p><strong>Описание:</strong> {{ ticket.description }}</p>
+<p><strong>Создана:</strong> {{ ticket.created|date:"d.m.Y H:i" }}</p>
+
+{% if ticket.status != 'CL' %}
+<form method="post" action="{% url 'helpdeskside:close_ticket' ticket.pk %}">
+    {% csrf_token %}
+    <button type="submit">Закрыть заявку</button>
+</form>
+{% endif %}
+
+<h3>Комментарии</h3>
+{% for comment in comments %}
+<p>
+    <strong>{{ comment.author.username }}</strong> ({{ comment.created|date:"d.m.Y H:i" }}):<br>
+    {{ comment.text }}
+</p>
+{% empty %}
+<p>Комментариев пока нет.</p>
+{% endfor %}
+
+<h4>Добавить комментарий</h4>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ comment_form.as_p }}
+    <button type="submit">Отправить</button>
 </form>
 
 {% endblock %}

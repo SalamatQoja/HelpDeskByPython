@@ -8,6 +8,25 @@ a {
     text-decoration: none;
 }
 
+.main-header{
+    display: flex;
+    flex-direction: column;
+}
+
+.client-dashboard{
+    width: 15%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #376d71;
+}
+
+.client_ticket-url{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .navbar {
     height: 60px;
     display: flex;

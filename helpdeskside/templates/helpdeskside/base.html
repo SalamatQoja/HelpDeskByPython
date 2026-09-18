@@ -4,33 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Библиотека Узбекистана{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'CSS.css' %}">
 </head>
 <body>
 <div class="main-header">
     <header class="main-header-top">
         <nav class="navbar">
-            <a href="{% url 'helpdeskside:home' %}"><img src="/static/images/helpdesk.png" width="280" height="120" style="margin-top: 10px"></a>
-            <div class="ticket-url">
-                <a href="{% url 'helpdeskside:create_ticket' %}" class="ticket-navbar">Создать</a>
-                <a href="{% url 'helpdeskside:my_tickets' %}" class="ticket-navbar">Мой заявку</a>
-            </div>
+            <a href="{% url 'helpdeskside:home' %}"><img src="/static/images/helpdesk.png" width="280" height="120"
+                                                         style="margin-top: 10px"></a>
             <aside class="users-autenticate">
-                {% if user.is_authenticated %}
-                <a href="{% url 'users:profile'%}" class="users-information">{{ user.username }}</a>
-                <img src="{{ user.photo.url}}" class="navbar-users-photo">
                 <div class="logout-side">
                     <img src="/static/images/logout4.png" style="width: 40px" height="30px"><a
                         href="{% url 'users:logout' %}" class="users-information-logo">Выйти</a>
                 </div>
-                {% else %}
                 <a href="{% url 'users:login' %}" class="users-information">Войти</a>
                 <a href="{% url 'users:register' %}" class="users-information">Регистрация</a>
-                {% endif %}
             </aside>
         </nav>
     </header>
+    <div class="client-dashboard">
+        <div class="client-profil">
+            {% if user.is_authenticated %}
+            <img src="{{ user.photo.url }}" class="navbar-users-photo">
+                        <a href="{% url 'users:profile'%}" class="users-information">{{ user.username }}</a>
+            {% else %}
+            {% endif %}
+        </div>
+        <article class="client_ticket-url">
+            <a href="{% url 'helpdeskside:create_ticket' %}" class="ticket-navbar">Создать</a>
+            <a href="{% url 'helpdeskside:my_tickets' %}" class="ticket-navbar">Мой заявку</a>
+        </article>
+    </div>
 </div>
 
 <main>

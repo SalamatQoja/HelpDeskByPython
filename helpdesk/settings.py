@@ -121,8 +121,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'helpdeskside:home'
+LOGOUT_REDIRECT_URL = 'helpdeskside:home'
 LOGIN_URL = 'users:login'
 
 AUTHENTICATION_BACKENDS = [
@@ -147,4 +147,6 @@ EMAIL_ADMIN = EMAIL_HOST_USER
 
 AUTH_USER_MODEL = 'users.User'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_USER_IMAGE = MEDIA_URL + 'users/person2.png'

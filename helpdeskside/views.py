@@ -5,11 +5,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 
+from users.decorators import role_required
 from .forms import TicketForm, CommentForm
-from .models import Ticket, Comment
-
-
-# from .forms import RegisterForm
+from .models import Ticket, Comment, Employee
 
 
 def index(request):
@@ -42,7 +40,6 @@ def my_tickets(request):
 
 @login_required
 def ticket_detail(request, pk):
-
     ticket = get_object_or_404(Ticket, pk=pk, author=request.user)
     comments = ticket.comments.all()
 
@@ -70,7 +67,6 @@ def close_ticket(request, pk):
     ticket.status = Ticket.Status.CLOSED
     ticket.save()
     return redirect('helpdeskside:ticket_detail', pk=pk)
-
 
 
 @user_passes_test(is_employee)
@@ -101,6 +97,52 @@ def assign_ticket(request, pk):
         ticket.save()
         return redirect('helpdeskside:ticket_detail', pk=pk)
     return render(request, 'helpdeskside/assign_ticket.html', {'ticket': ticket})
+
+
+@login_required
+@role_required('support', 'admin')
+def all_tickets_view(request):
+    tickets = Ticket.objects.all().order_by('-created')
+    return render(request, 'helpdeskside/all_tickets.html', {'tickets': tickets})
+
+
+@login_required
+@role_required('support', 'admin')
+def ticket_detail_view(request, pk):
+    ticket = get_object_or_404(Ticket, pk=pk)
+
+    if request.method == 'POST':
+
+        if 'status' in request.POST:
+            ticket.status = request.POST.get('status')
+            ticket.save(update_fields=['status'])
+
+        if 'priority' in request.POST:
+            ticket.priority = request.POST.get('priority')
+            ticket.save(update_fields=['priority'])
+
+        if 'assigned_to' in request.POST:
+            ticket.assigned_to_id = request.POST.get('assigned_to') or None
+            ticket.save(update_fields=['assigned_to'])
+
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid() and comment_form.cleaned_data.get('text'):
+            comment = comment_form.save(commit=False)
+            comment.ticket = ticket
+            comment.author = request.user
+            comment.save()
+
+        return redirect('helpdeskside:employee_ticket_detail', pk=pk)
+
+    comment_form = CommentForm()
+    comments = ticket.comments.all().order_by('created_at')
+    # history = ticket.history.all().order_by('-created_at')  # если делаете модель истории
+
+    return render(request, 'helpdeskside/employee_ticket_detail.html', {
+        'ticket': ticket,
+        'comment_form': comment_form,
+        'comments': comments,
+    })
 
 
 def page_not_found(request, exception):
