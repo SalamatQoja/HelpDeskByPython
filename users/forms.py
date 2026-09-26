@@ -37,6 +37,15 @@ class RegisterFormUsers(UserCreationForm):
 
         }
 
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            # стили для паролей — через __init__, не переопределяя поля
+            self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-input'})
+            self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-input'})
+            self.fields['password1'].label = 'Пароль'
+            self.fields['password2'].label = 'Повтор пароля'
+            self.fields['username'].label = 'Логин'
+
     # def clean_password2(self) UserCtreationForm class berilse paroldi teksered validatsya qilu shart emes :
     #     cd = self.cleaned_data
     #     if cd['password'] != cd['password2']:

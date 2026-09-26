@@ -1,39 +1,85 @@
-{% extends "helpdeskside/base.html" %}
+{% extends "users/support_dashboard.html" %}
+
 {% load static %}
-{% block content %}
+{% block employee_content %}
 
-<h2>Заявка #{{ ticket.pk }}</h2>
-<p><strong>Статус:</strong> {{ ticket.get_status_display }}</p>
-<p><strong>Приоритет:</strong> {{ ticket.get_priority_display }}</p>
-<p><strong>Описание:</strong> {{ ticket.description }}</p>
-<p><strong>Создана:</strong> {{ ticket.created|date:"d.m.Y H:i" }}</p>
+<div class="employee-ticket-detail-page">
+    <div class="employee-ticket-detail-inner">
+        <h2 class="employee-ticket-detail-title">Заявка #{{ ticket.pk }} - {{ ticket.title }}</h2>
+        <hr style="width: 100%">
+        <p><strong>Имя:</strong> {{ ticket.author }}</p>
+        <p><strong>Статус:</strong> {{ ticket.get_status_display }}</p>
+        <p><strong>Приоритет:</strong> {{ ticket.get_priority_display }}</p>
+        <p><strong>Назначена:</strong>
+            {% if ticket.assigned_to %}{{ ticket.assigned_to }}{% else %}—{% endif %}
+        </p>
+        <p><strong>Описание:</strong> {{ ticket.description }}</p>
+        <p><strong>Создана:</strong> {{ ticket.created|date:"d.m.Y H:i" }}</p>
 
-<form method="post">
-    {% csrf_token %}
-    <select name="status">
-        {% for value, label in ticket.Status.choices %}
-        <option value="{{ value }}" {% if ticket.status== value %}selected{% endif %}>{{ label }}</option>
+        <div class="employee-ticket-detail-form">
+            <form method="post" class="employee-ticket-detail-form-inner">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="update">
+
+                <div class="employee-status-change">
+                    <h3><img src="/static/images/status.png" class="create-pencil">Изменить статус</h3>
+                    <select name="status">
+                        {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if ticket.status == value %}selected{% endif %}>{{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="employee-priority-change">
+                    <h3><img src="/static/images/priority.jpg" width="60px" height="50px">Изменить приоритет</h3>
+                    <select name="priority">
+                        {% for value, label in priority_choices %}
+                        <option value="{{ value }}" {% if ticket.priority == value %}selected{% endif %}>{{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="employee-assign-change">
+                    <h3><img src="/static/images/register.jpg" class="create-pencil"> Назначить сотрудника</h3>
+                    <select name="assigned_to">
+                        <option value="">— Не назначен —</option>
+
+                        {% regroup employees by user.role as roles_list %}
+                        {% for role in roles_list %}
+                        <optgroup
+                                label="{% if role.grouper == 'support' %}Сотрудники поддержки{% elif role.grouper == 'admin' %}Администраторы{% else %}{{ role.grouper }}{% endif %}">
+                            {% for emp in role.list %}
+                            <option value="{{ emp.pk }}"
+                                    {% if ticket.assigned_to_id == emp.pk %}selected{% endif %}>
+                                {{ emp.user.get_full_name|default:emp.user.username }}
+                            </option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="employee-status-priority-change-btn">Сохранить</button>
+            </form>
+
+        </div>
+
+        <h3><img src="/static/images/pencil.png" class="create-pencil">Комментарии</h3>
+        {% for c in comments %}
+        <p class="user-comment"><strong><img src="/static/images/register.jpg" class="create-pencil"> {{
+            c.author.username
+            }}:</strong> {{ c.text }} <strong>{{ c.created|date:"d.m.Y H:i" }}</strong></p>
+        {% empty %}
+        <p>Комментариев пока нет</p>
         {% endfor %}
-    </select>
 
-    <select name="priority">
-        {% for value, label in ticket.Priority.choices %}
-        <option value="{{ value }}" {% if ticket.priority== value %}selected{% endif %}>{{ label }}</option>
-        {% endfor %}
-    </select>
-
-    <button type="submit">Сохранить</button>
-</form>
-
-<h3>Комментарии</h3>
-{% for c in comments %}
-<p><strong>{{ c.author }}:</strong> {{ c.text }} <small>{{ c.created_at|date:"d.m.Y H:i" }}</small></p>
-{% endfor %}
-
-<form method="post">
-    {% csrf_token %}
-    {{ comment_form.as_p }}
-    <button type="submit">Добавить комментарий</button>
-</form>
+        <h4>Добавить комментарий</h4>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="comment">
+            {{ comment_form.as_p }}
+            <button type="submit" class="employee-comment-btn">Отправить</button>
+        </form>
+    </div>
+</div>
 
 {% endblock %}

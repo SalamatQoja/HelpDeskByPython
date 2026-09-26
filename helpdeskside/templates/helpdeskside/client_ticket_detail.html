@@ -1,0 +1,43 @@
+{% extends "users/client_dashboard.html" %}
+
+{% load static%}
+{% block tickets_content %}
+
+<div class="client-ticket-detail">
+    <aside class="client-ticket-detail-inner">
+        <h2 class="client-ticket-detail-title">{{ ticket.title }}</h2>
+        <hr style="width: 100%">
+        <p><strong>Имя:</strong> {{ ticket.author }}</p>
+        <p><strong>Статус:</strong> {{ ticket.get_status_display }}</p>
+        <p><strong>Приоритет:</strong> {{ ticket.get_priority_display }}</p>
+        <p><strong>Описание:</strong> {{ ticket.description }}</p>
+        <p><strong>Создана:</strong> {{ ticket.created|date:"d.m.Y H:i" }}</p>
+
+        {% if ticket.status != 'CL' %}
+        <form method="post" action="{% url 'helpdeskside:close_ticket' ticket.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="client-ticket-detail-close-btn">Закрыть заявку</button>
+        </form>
+        {% endif %}
+
+        <h3><img src="/static/images/pencil.png" class="create-pencil"> Комментарии</h3>
+        {% for comment in comments %}
+        <p class="user-comment-inform">
+            <strong><img src="/static/images/register.jpg" class="create-pencil"> {{ comment.author.username }}</strong>
+            ({{ comment.created|date:"d.m.Y H:i" }}):<br>
+            {{ comment.text }}
+        </p>
+        {% empty %}
+        <p>Комментариев пока нет.</p>
+        {% endfor %}
+
+        <h4><img src="/static/images/pencil.png" class="create-pencil"> Добавить комментарий</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="client-ticket-detail-comment-btn">Отправить</button>
+        </form>
+    </aside>
+</div>
+
+{% endblock %}

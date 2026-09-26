@@ -1,0 +1,107 @@
+{% extends "users/admin_dashboard.html" %}
+{% load static %}
+
+{% block title %}Статистика{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="dashboard-page">
+    <div class="dashboard-page-inner">
+        <header class="status-inform-grid">
+            <a href="{% url 'helpdeskside:all_tickets' %}?status=NEW" class="status-card-new">
+                <div class="status-inner">
+                    <h3 style="font-size: 1.6em">Новые</h3>
+                    <p class="stat-number">{{ new }}</p>
+                </div>
+            </a>
+
+            <a href="{% url 'helpdeskside:all_tickets' %}?status=IN_PROGRESS" class="status-card-work">
+                <div class="status-inner">
+                    <h3 style="font-size: 1.6em">В работе</h3>
+                    <p class="stat-number">{{ in_progress }}</p>
+                </div>
+            </a>
+
+            <a href="{% url 'helpdeskside:all_tickets' %}?status=WT" class="status-card-waiting">
+                <div class="status-waiting-inner">
+                    <h3 style="font-size: 1.6em">Ожидают ответа</h3>
+                    <p class="stat-number" style="margin-top: 73px">{{ waiting }}</p>
+                </div>
+            </a>
+
+            <a href="{% url 'helpdeskside:all_tickets' %}?status=RL" class="status-card-resolved">
+                <div class="status-inner">
+                    <h3 style="font-size: 1.6em">Решены</h3>
+                    <p class="stat-number">{{ resolved }}</p>
+                </div>
+            </a>
+
+            <a href="{% url 'helpdeskside:all_tickets' %}?priority=CRITICAL" class="status-card-critical">
+                <div class="status-inner-critical">
+                    <h3 style="font-size: 1.3em">Критические</h3>
+                    <p class="stat-number">{{ critical }}</p>
+                </div>
+            </a>
+
+            <a href="{% url 'helpdeskside:all_tickets' %}?assigned=none" class="status-card-unassigned">
+                <div class="status-inner">
+                    <h3 style="font-size: 1.1em">Без исполнителя</h3>
+                    <p class="stat-number">{{ unassigned }}</p>
+                </div>
+            </a>
+
+            <div class="status-card-total-ticket">
+                <div class="status-inner">
+                    <h3 style="font-size: 1.2em">Всего заявок</h3>
+                    <p class="stat-number">{{ total }}</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-latest-ticket">
+            <div class="dashboard-latest-ticket-title">
+                <h2 style="margin-left: 20px"><img src="/static/images/list4.png" style="height: 30px"> Последние заявки
+                </h2>
+                <div class="dashboard-latest-ticket-item">
+                    <img src="/static/images/search-images13 .png" style="height: 30px;">  <input type="text"
+                                                                                                placeholder="найти...."
+                                                                                                class="my-tickets-input">
+                </div>
+            </div>
+            <hr style="width: 96%">
+            <table border="1" cellpadding="8" class="dashboard-statistic-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Тема</th>
+                    <th>Автор</th>
+                    <th>Статус</th>
+                    <th>Приоритет</th>
+                    <th>Создана</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in latest_tickets %}
+                <tr>
+                    <td>{{ t.pk }}</td>
+                    <td>{{ t.title }}</td>
+                    <td>{{ t.author }}</td>
+                    <td>{{ t.get_status_display }}</td>
+                    <td>{{ t.get_priority_display }}</td>
+                    <td>{{ t.created|date:"d.m.Y H:i" }}</td>
+                    <td style="width: 100px">
+                        <a href="{% url 'helpdeskside:employee_ticket_detail' t.pk %}" class="dashboard-latest-ticket-open">Открыть</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">Заявок пока нет</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

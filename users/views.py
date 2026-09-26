@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.contrib.auth.views import LoginView, PasswordChangeView, LogoutView
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
@@ -20,28 +20,20 @@ class LoginUser(LoginView):
     extra_context = {'title': 'Авторизация'}
     success_url = reverse_lazy('home')
 
-    # def get_success_url(self):
-    #     user = self.request.user
-    #     if user.role == User.Roles.ADMIN:
-    #         return reverse_lazy('users:admin_dashboard')
-    #     elif user.role == User.Roles.SUPPORT:
-    #         return reverse_lazy('users:support_dashboard')
-    #     return reverse_lazy('users:client_dashboard')
-
-    #
-    # def get_success_url(self):
-    #     return   reverse_lazy("home")
-
 
 class RegisterUser(CreateView):
     form_class = RegisterFormUsers
     template_name = 'users/register.html'
     extra_context = {'title': 'Регистрация'}
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('helpdeskside:home')
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        login(self.request, self.object)
+        login(
+            self.request,
+            self.object,
+            backend='django.contrib.auth.backends.ModelBackend',
+        )
         return response
 
 
@@ -65,29 +57,33 @@ class UserPasswordChange(PasswordChangeView):
     template_name = 'users/password_change_form.html'
 
 
-User = get_user_model()
+@login_required
+def post_login_redirect(request):
+    role = request.user.role
+
+    if role == User.Roles.ADMIN:
+        return redirect('users:admin_dashboard')
+    elif role == User.Roles.SUPPORT:
+        return redirect('users:support_dashboard')
+    elif role == User.Roles.CLIENT:
+        return redirect('users:client_dashboard')
+    else:
+        return redirect('users:login')
 
 
 @login_required
-@role_required('admin')
-def manage_users(request):
-    users = User.objects.exclude(id=request.user.id).order_by('username')
-    return render(request, 'users/manage_users.html', {'users': users})
+@role_required(User.Roles.ADMIN)
+def admin_dashboard(request):
+    return render(request, 'users/admin_dashboard.html')
 
 
 @login_required
-@role_required('admin')
-def change_user_role(request, user_id):
-    target_user = get_object_or_404(User, id=user_id)
+@role_required(User.Roles.SUPPORT, User.Roles.ADMIN)  # админ тоже может видеть
+def support_dashboard(request):
+    return render(request, 'users/support_dashboard.html')
 
-    if target_user == request.user:
-        return redirect('users:manage_users')
 
-    if request.method == 'POST':
-        new_role = request.POST.get('role')
-        if new_role in User.Roles.values:
-            target_user.role = new_role
-            target_user.save(update_fields=['role'])
-
-    return redirect('users:manage_users')
-
+@login_required
+@role_required(User.Roles.CLIENT)
+def client_dashboard(request):
+    return render(request, 'users/client_dashboard.html')

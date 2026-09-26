@@ -1,0 +1,81 @@
+{% extends "helpdeskside/base.html" %}
+
+{% load static %}
+{% block content %}
+
+
+<div class="admin-page">
+    <header class="main-header-top-for-support">
+        <nav class="navbar-for-admin">
+            <a href="{% url 'helpdeskside:home' %}"><img src="/static/images/helpdesk.png" width="180" height="120"
+                                                         style="margin-top: 10px"></a>
+            <aside class="users-autenticate">
+                {% if user.is_authenticated %}
+                <a href="{% url 'users:profile'%}" class="users-information">{{ user.username }}</a>
+                {% if user.photo %}
+                <img src="{{ user.photo.url }}" alt="{{ user.username }}" class="user-avatar">
+                {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="{{ user.username }}" class="user-avatar">
+                {% endif %}
+                <div class="logout-side">
+                    <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn"><img src="/static/images/logout4.png"
+                                                                      style="margin-left: -10px" width="80px"
+                                                                      height="37px">Выйти
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <a href="{% url 'users:login' %}" class="users-information">Войти</a>
+                <a href="{% url 'users:register' %}" class="users-information">Регистрация</a>
+                {% endif %}
+            </aside>
+        </nav>
+    </header>
+    <main class="admin-page-inner">
+        <aside class="admin-ticket-row">
+            <div class="employee-ticket-row-inner">
+                <img src="/static/images/list4.png" style="height: 30px" class="employee-ticket-row-img">
+                <a href="{% url 'helpdeskside:all_tickets' %}" class="employee-ticket-url">Все заявка</a>
+            </div>
+            <a href="{% url 'helpdeskside:history_tickets' %}" class="history-ticket-url">
+                <svg class="shrink-0 w-5 h-5 transition duration-75 group-hover:text-fg-brand" aria-hidden="true"
+                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M5 19V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v13H7a2 2 0 0 0-2 2Zm0 0a2 2 0 0 0 2 2h12M9 3v14m7 0v4"/>
+                </svg>
+                История заявка</a>
+            <a href="{% url 'helpdeskside:dashboard_statistics' %}" class="employee-ticket-url">
+                <svg class="w-5 h-5 transition duration-75 group-hover:text-fg-brand" aria-hidden="true"
+                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z"/>
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"
+                          d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z"/>
+                </svg>
+                Dashboard</a>
+        </aside>
+        <div class="employee-ticket-inform">
+            <section class="dashboard-content">
+                {% block all_tickets_content %}{% endblock %}
+            </section>
+            <section class="dashboard-content">
+                {% block employee_content %}{% endblock %}
+            </section>
+            <section class="dashboard-content">
+                {% block history_content %}{% endblock %}
+            </section>
+            <section class="dashboard-content">
+                {% block dashboard_content %}{% endblock %}
+            </section>
+            <section class="dashboard-content">
+                {% block profile_content %}{% endblock %}
+            </section>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+
+

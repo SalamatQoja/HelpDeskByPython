@@ -1,0 +1,54 @@
+{% extends "helpdeskside/base.html" %}
+
+{% load static %}
+{% block content %}
+
+<div class="client-page">
+    <header class="main-header-top">
+        <nav class="navbar">
+            <a href="{% url 'helpdeskside:home' %}"><img src="/static/images/helpdesk.png" width="180" height="120"
+                                                         style="margin-top: 10px"></a>
+            <menu class="client-ticket-row">
+                <a href="{% url 'helpdeskside:create_ticket' %}" class="ticket-navbar">Создать</a>
+                <a href="{% url 'helpdeskside:my_tickets' %}" class="ticket-navbar">Мой заявку</a>
+            </menu>
+            <aside class="users-autenticate">
+                {% if user.is_authenticated %}
+                <a href="{% url 'users:profile'%}" class="users-information">{{ user.username }}</a>
+                {% if user.photo %}
+                <img src="{{ user.photo.url }}" alt="{{ user.username }}" class="user-avatar">
+                {% else %}
+                <img src="{% static 'images/default-avatar.png' %}" alt="{{ user.username }}" class="user-avatar">
+                {% endif %}
+                <div class="logout-side">
+                    <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn"><img src="/static/images/logout4.png"
+                                                                      style="margin-left: -10px" width="80px"
+                                                                      height="37px">Выйти
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <a href="{% url 'users:login' %}" class="users-information">Войти</a>
+                <a href="{% url 'users:register' %}" class="users-information">Регистрация</a>
+                {% endif %}
+            </aside>
+        </nav>
+    </header>
+    <div class="client-ticket-inform">
+        <section class="dashboard-content">
+            {% block create_content %}{% endblock %}
+        </section>
+        <section class="dashboard-content">
+            {% block my_tickets_content %}{% endblock %}
+        </section>
+        <section class="dashboard-content">
+            {% block tickets_content %}{% endblock %}
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+
+

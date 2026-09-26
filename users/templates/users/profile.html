@@ -1,14 +1,14 @@
-{% extends "helpdeskside/base.html" %}
+{% extends "users/support_dashboard.html" %}
 
 {% load static %}
-{% block content %}
+{% block profile_content %}
 
 <div class="users-profile">
-    <h2 class="profile-title">Профиль</h2>
+    <h2 class="profile-title"><img src="/static/images/profile.jpg" style="height: 50px;"> Профиль</h2>
     <form method="post" enctype="multipart/form-data" class="profile-form">
         {% csrf_token %}
-        {% if user.photo %}
-        <p><img src="{{ user.photo.url}}" style="width: 100%" height="270px"></p>
+        {% if user.photo.url %}
+        <p><img src="{{ user.photo.url}}" width="97%" height="270px"></p>
         {% else %}
         <p><img src="{{ default_image }}"></p>
         {% endif %}

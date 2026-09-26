@@ -1,0 +1,82 @@
+{% extends "users/admin_dashboard.html" %}
+
+{% load static%}
+{% block all_tickets_admin_
+content %}
+
+<div class="employee-all-tickets-page">
+    <div class="employee-all-tickets-inner">
+        <div class="employee-all-tickets-title">
+            <h2 class="all-tickets-title"><img src="/static/images/images 11.png" class="my-tickets-img">Все заявку
+            </h2>
+            <div class="my-tickets-search-row" style="margin-right: 25px">
+                <img src="/static/images/search-images13 .png" style="height: 30px;"><input type="text"
+                                                                                            placeholder="найти...."
+                                                                                            class="my-tickets-input">
+            </div>
+        </div>
+        <hr style="width: 98%">
+        <table border="1" cellpadding="10" style="width: 1150px">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Тема</th>
+                <th>Автор</th>
+                <th>Статус</th>
+                <th>Приоритет</th>
+                <th>Назначена</th>
+                <th>Создана</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in page_obj %}
+            <tr>
+                <td>{{ item.pk }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.author }}</td>
+                <td>{{ item.get_status_display }}</td>
+                <td>{{ item.get_priority_display }}</td>
+                <td>
+                    {% if item.assigned_to %}
+                    {{ item.assigned_to }}
+                    {% else %}
+                    <em>—</em>
+                    {% endif %}
+                </td>
+                <td>{{ item.created|date:"d.m.Y H:i" }}</td>
+                <td>
+                    <a href="{% url 'helpdeskside:employee_ticket_detail' item.pk %}" class="client-ticket-open">
+                        Открыть
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">Заявок пока нет</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <p class="employee-all-tickets-count">Всего: {{ page_obj.paginator.count }}</p>
+        {% if page_obj.has_other_pages %}
+        <div class="employee-pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"> <img
+                    src="/static/images/previuos.png"
+                    height="30px"></a>
+            {% endif %}
+
+            <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"><img src="/static/images/next-ikonka.png"
+                                                                 style="height: 30px;"></a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

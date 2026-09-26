@@ -121,9 +121,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'helpdeskside:home'
-LOGOUT_REDIRECT_URL = 'helpdeskside:home'
 LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'users:post_login_redirect'
+LOGOUT_REDIRECT_URL = 'users:login'
+
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

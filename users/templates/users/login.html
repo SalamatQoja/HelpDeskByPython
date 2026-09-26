@@ -4,19 +4,22 @@
 {% block content %}
 
 <div class="login-page">
-    <h2 class="login-title">Вход</h2>
-    <form method="post" class="login-form">
-        {% csrf_token %}
-        <!--    <input type="hidden" name="text" value="{{ next}}">-- bul sayttda internet magazinde avtorzatsyadan keyin korzinaga otetin kezde kerek  >
-        <!--    <div class="form-error">{{ form.non_field_errors}}</div>-->
-        <!--    {% for f in form %}-->
-        <!--    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label></p>-->
-        <!--    <div class="form-error">{{ f.errors }}</div>-->
-        <!--    {% endfor %}-->
-        {{ form.as_p }}
-        <button type="submit" class="login-button">Войти</button>
+    <div class="login-page-inner">
+        <h2 class="login-title">Вход</h2>
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <!--    <input type="hidden" name="text" value="{{ next}}">-- bul sayttda internet magazinde avtorzatsyadan keyin korzinaga otetin kezde kerek  >
+            <!--    <div class="form-error">{{ form.non_field_errors}}</div>-->
+            <!--    {% for f in form %}-->
+            <!--    <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label></p>-->
+            <!--    <div class="form-error">{{ f.errors }}</div>-->
+            <!--    {% endfor %}-->
+            {{ form.as_p }}
+            <button type="submit" class="login-button">Войти</button>
 
-        <p><a href="{% url 'users:password_reset' %}" style="color: red">Забыли пароль?</a></p>
-    </form>
+            <p><a href="{% url 'users:password_reset' %}" style="color: red">Забыли пароль?</a></p>
+            <p><a href="{% url 'users:register' %}" style="color: red">Вход регистрация</a></p>
+        </form>
+    </div>
 </div>
 {% endblock %}

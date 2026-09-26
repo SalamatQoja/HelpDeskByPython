@@ -8,10 +8,11 @@ from . import views
 
 app_name = 'users'
 
-urlpatterns = [
+urlpatterns = (
     path('login/', views.LoginUser.as_view(), name='login'),
     path('register/', views.RegisterUser.as_view(), name='register'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('redirect/', views.post_login_redirect, name='post_login_redirect'),
     path('profile/', views.ProfilUser.as_view(), name='profile'),
     path('password-change/', views.UserPasswordChange.as_view(), name='password_change'),
     path('password-change/done/', PasswordChangeDoneView.as_view(template_name='users/password_change_done.html'),
@@ -29,6 +30,7 @@ urlpatterns = [
     path('password-reset/complete/',
          PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
-    path('manage-users/', views.manage_users, name='manage_users'),
-    path('manage-users/<int:user_id>/change-role/', views.change_user_role, name='change_user_role'),
-]
+    path('admin-panel/', views.admin_dashboard, name='admin_dashboard'),
+    path('support/', views.support_dashboard, name='support_dashboard'),
+    path('cabinet/', views.client_dashboard, name='client_dashboard'),
+)

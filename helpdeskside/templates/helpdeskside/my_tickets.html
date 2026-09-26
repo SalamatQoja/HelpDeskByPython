@@ -1,32 +1,67 @@
-{% extends "helpdeskside/base.html" %}
+{% extends "users/client_dashboard.html" %}
 
 {% load static %}
-{% block content %}
+{% block my_tickets_content %}
 
 <div class="my-tickets">
-    <h2 class="my-tickets-title">Мой заявку</h2>
-    <hr>
+    <div class="my-tickets-search">
+        <div class="my-tickets-title">
+            <h2 class="my-tickets-title"><img src="/static/images/images 11.png" class="my-tickets-img">Мой заявку</h2>
+        </div>
+        <div class="my-tickets-search-row">
+            <img src="/static/images/search-images13 .png" style="height: 30px;"><input type="text"
+                                                                                        placeholder="найти...."
+                                                                                        class="my-tickets-input">
+        </div>
+    </div>
+    <hr style="width: 95%">
     <table border="1" cellpadding="10" class="my-tickets-table">
+        <thead>
         <tr>
-            <th>Заголовка</th>
+            <th>Заголовок</th>
             <th>Статус</th>
             <th>Приоритет</th>
             <th>Создана</th>
+            <th></th>
         </tr>
-        {% for ticket in tickets %}
+        </thead>
+        <tbody>
+        {% for ticket in page_obj %}
         <tr>
-            <td><a href="{% url 'helpdeskside:ticket_detail' ticket.pk %}">{{ ticket.title }}</a></td>
+            <td>
+                {{ ticket.title }}
+                </a>
+            </td>
             <td>{{ ticket.get_status_display }}</td>
             <td>{{ ticket.get_priority_display }}</td>
             <td>{{ ticket.created|date:"d.m.Y H:i" }}</td>
+            <td style="width: 130px"><a href="{% url 'helpdeskside:client_ticket_detail' ticket.pk %}"
+                                        class="user-ticket-detail-btn">Редактировать</a></td>
         </tr>
         {% empty %}
         <tr>
             <td colspan="4">У вас пока нет заявок.</td>
         </tr>
         {% endfor %}
-
+        </tbody>
     </table>
+    {% if page_obj.has_other_pages %}
+    <div class="clinet-page-pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="client-pagination-previous"> <img
+                src="/static/images/previuos.png"
+                height="30px"></a>
+        {% endif %}
+
+        <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="client-pagination-next"><img
+                src="/static/images/next-ikonka.png"
+                height="30px"></a>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

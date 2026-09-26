@@ -1,0 +1,73 @@
+{% extends "users/support_dashboard.html" %}
+{% load static %}
+
+{% block title %}История заявок{% endblock %}
+
+{% block history_content %}
+<div class="employee-history-page">
+    <div class="employee-history-inner">
+        <div class="employee-history-title">
+            <h2 class="employee-history-title"><img src="/static/images/order-list4.jpg" style="height: 45px;">История
+                заявок</h2>
+            <div class="my-tickets-search-row" style="margin-right: 25px">
+                <img src="/static/images/search-images13 .png" style="height: 30px;"><input type="text"
+                                                                                            placeholder="найти...."
+                                                                                            class="my-tickets-input">
+            </div>
+        </div>
+        <hr>
+
+        <table border="1" cellpadding="8" class="employee-history-table">
+            <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Заявка</th>
+                <th>Кто изменил</th>
+                <th>Поле</th>
+                <th>Было</th>
+                <th>Стало</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for h in page_obj %}
+            <tr>
+                <td style="color: #2b4960">{{ h.changed_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    #{{ h.ticket.pk }} — {{ h.ticket.title }}
+                </td>
+                <td style="color: #2b4960">
+                    {% if h.changed_by %}
+                    {{ h.changed_by.username }}
+                    {% else %}
+                    <em>удалённый пользователь</em>
+                    {% endif %}
+                </td>
+                <td style="color: #2b4960">{{ h.field_changed }}</td>
+                <td><s style="color: #2b4960">{{ h.old_value }}</s></td>
+                <td><b style="color: #2b4960 ">{{ h.new_value }}</b></td>
+                <th><a href="{% url 'helpdeskside:employee_ticket_detail' h.ticket.pk %}" class="employee-history-open-btn">Открыт</a>
+                </th>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">История пуста</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if page_obj.has_other_pages %}
+        <div class="employee-history-pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">← Назад</a>
+            {% endif %}
+            <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Вперёд →</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

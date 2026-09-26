@@ -4,12 +4,15 @@
 {% block content %}
 
 <div class="register-page">
-    <h2 class="register-title">Регистрация</h2>
-    <form method="post" class="register-form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="register-btn">Создать</button>
-    </form>
+    <div class="register-page-inner">
+        <h2 class="register-title"><img src="/static/images/register.jpg" style="height: 30px;">Регистрация</h2>
+        <form method="post" class="register-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="register-btn">Создать</button>
+            <a href="{% url 'users:login' %}" class="register-login-next">Авторизация</a>
+        </form>
+    </div>
 </div>
 
 {% endblock %}

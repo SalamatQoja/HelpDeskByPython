@@ -1,9 +1,0 @@
-{% extends "helpdeskside/base.html" %}
-
-{% block content %}
-<h2>Все заявку</h2>
-{% for item in page_obj %}
-{{ item.pk }}: {{ item.title }}
-{% endfor %}
-
-{% endblock %}
