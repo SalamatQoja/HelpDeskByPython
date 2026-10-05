@@ -1,23 +1,23 @@
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import  login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, PasswordChangeView, LogoutView
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from helpdesk import settings
 from .decorators import role_required
-from .forms import LoginFormUsers, RegisterFormUsers, ProfileUserForm, PasswordChangeForm
+from .forms import LoginFormUsers, RegisterFormUsers, ProfileUserForm, PasswordChangeForm, AdminSetPasswordForm
 from .models import User
+from django.contrib import messages
 
 
 class LoginUser(LoginView):
     form_class = LoginFormUsers
     template_name = 'users/login.html'
-    extra_context = {'title': 'Авторизация'}
+    extra_context = {'title': 'Вход'}
     success_url = reverse_lazy('home')
 
 
@@ -87,3 +87,90 @@ def support_dashboard(request):
 @role_required(User.Roles.CLIENT)
 def client_dashboard(request):
     return render(request, 'users/client_dashboard.html')
+
+
+@login_required
+@role_required('admin')
+def users_list(request):
+    all_users = User.objects.all().order_by('username')
+    paginator = Paginator(all_users, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'users/users_list.html', {'page_obj': page_obj})
+
+
+@login_required
+@role_required('admin')
+def change_user_password(request, user_id):
+    target_user = get_object_or_404(User, pk=user_id)
+
+    if request.method == 'POST':
+        form = AdminSetPasswordForm(target_user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                f'Пароль пользователя {target_user.username} изменён'
+            )
+            # return redirect('users:users_list')
+    else:
+        form = AdminSetPasswordForm(target_user)
+
+    return render(request, 'users/change_users_password.html', {
+        'form': form,
+        'target_user': target_user,
+    })
+
+
+@login_required
+@role_required('admin')
+def block_user(request, user_id):
+    target_user_block = get_object_or_404(User, pk=user_id)
+
+    if target_user_block == request.user:
+        messages.error(request, 'Нельзя заблокировать самого себя')
+        return redirect('users:users_list')
+
+    # защита: обычный админ суперпользователди блок кыла алмайды
+    if target_user_block.is_superuser and not request.user.is_superuser:
+        messages.error(request, 'Только суперпользователь может блокировать суперпользователя')
+        return redirect('users:users_list')
+
+    if request.method == 'POST':
+        target_user_block.is_active = False
+        target_user_block.save(update_fields=['is_active'])
+
+        # разлогиниваем все активные сессии target
+        # _kill_user_sessions(target)
+
+        messages.success(request, f'Пользователь {target_user_block.username} заблокирован')
+        # return redirect('users:users_list')
+
+    return render(request, 'users/block_user_confirm.html', {
+        'target_user': target_user_block,
+    })
+
+
+@login_required
+@role_required('admin')
+def unblock_user(request, user_id):
+    target_user_unblock = get_object_or_404(User, pk=user_id)
+
+    if request.method == 'POST':
+        target_user_unblock.is_active = True
+        target_user_unblock.save(update_fields=['is_active'])
+        messages.success(request, f'Пользователь {target_user_unblock.username} разблокирован')
+        # return redirect('users:users_list')
+
+    return render(request, 'users/unblock_user_confirm.html', {
+        'target_user': target_user_unblock,
+    })
+
+
+# def _kill_user_sessions(user):
+#     """Удаляет все активные сессии пользователя — мгновенный логаут."""
+#     sessions = Session.objects.filter(expire_date__gte=timezone.now())
+#     for s in sessions:
+#         data = s.get_decoded()
+#         if data.get('_auth_user_id') == str(user.pk):
+#             s.delete()

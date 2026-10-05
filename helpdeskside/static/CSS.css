@@ -19,23 +19,35 @@ h3 {
 table {
     background-color: white;
     color: white;
+    border: 1px solid #dcd9d9;
+    border-radius: 10px;
 }
 
 td {
-    color: #234960;
+    color: #5b7888;
     border-color: #2f414a;
+    border-bottom: inset;
+    border-bottom-color: #6a6a6a;
+    border-right: inset;
+    border-right-color: #888888;
 }
 
 th {
     color: #21394a;
     border-color: #2f414a;
     border-top-color: #3a4e59;
+    border-bottom: inset;
+    border-bottom-color: #6a6a6a;
+    border-right: inset;
+    border-right-color: #888888;
 }
 
 tr {
     color: #f1eaea;
     border-color: #2f414a;
-    border-top-color: red;
+    border-bottom: inset;
+    border-bottom-color: #6a6a6a;
+    border-right: dashed;
 }
 
 
@@ -162,8 +174,9 @@ select {
     align-items: center;
     gap: 10px;
     min-height: 100vh;
-    background-color: #376d71;
+    background-color: #f0f1f1;
     font-size: 1.2em;
+    border: 1px solid #e0e2e3;
 }
 
 .employee-ticket-row-inner {
@@ -171,12 +184,11 @@ select {
     flex-direction: row;
     align-items: center;
     gap: 5px;
-    margin-left: -20px;
     margin-top: 40px;
 }
 
 .employee-ticket-row-img {
-    background-color: #114c50;
+    background-color: gray;
 }
 
 .employee-page-inner {
@@ -187,7 +199,7 @@ select {
 
 
 .employee-all-tickets-page {
-    width: 1200px;
+    width: 90%;
     margin: 0 auto;
     margin-top: 50px;
     border: 1px solid #cbcbe4;
@@ -307,11 +319,11 @@ select {
 
 .employee-ticket-url {
     font-size: 1.1em;
-    color: white;
+    color: gray;
 }
 
 .employee-history-page {
-    width: 80%;
+    width: 90%;
     margin: 0 auto;
     border: 1px solid #cdcdf6;
     background-color: #fafafd;
@@ -399,8 +411,8 @@ textarea.form-control {
     align-items: center;
     justify-content: space-between;
     padding: 1px 30px 1px 30px;
-    background-color: #376d71;
-    box-shadow: 0px 8px 12px 0px #082a3c;
+    background-color: #f0f1f1;
+    border: 1px solid #d5d5ec;
 }
 
 .navbar-for-admin {
@@ -409,9 +421,9 @@ textarea.form-control {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 1px 30px 1px 30px;
-    background-color: #376d71;
-    box-shadow: 0px 8px 12px 0px #082a3c;
+    padding: 1px 30px 0px 30px;
+    background-color: #f0f1f1;
+    border: 1px solid #dddada;
 }
 
 .admin-page-inner {
@@ -421,14 +433,15 @@ textarea.form-control {
 }
 
 .admin-ticket-row {
-    width: 15%;
+    width: 13%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 10px;
     min-height: 100vh;
-    background-color: #376d71;
+    background-color: #f0f1f1;
+    border: 1px solid #cdcbcb;
     font-size: 1.2em;
+    padding-left: 20px;
 }
 
 
@@ -459,7 +472,7 @@ textarea.form-control {
 }
 
 .users-information {
-    color: white;
+    color: #605b5b;
     text-decoration: none;
     font-size: 1.2em;
 }
@@ -791,7 +804,7 @@ tr {
     border-radius: 10px;
     background-color: #fafbfb;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 50px;
     padding-bottom: 20px;
 }
 
@@ -818,7 +831,7 @@ tr {
 }
 
 .history-ticket-url {
-    color: white;
+    color: gray;
 }
 
 .dashboard-page {
@@ -1041,8 +1054,238 @@ tr {
     cursor: pointer;
 }
 
+.userlist-page {
+    width: 85%;
+    border: 1px solid #e5e7ea;
+    border-radius: 10px;
+    background-color: #fafbfb;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding-bottom: 20px;
+}
+
+.userlist-inner {
+    margin-left: 20px;
+}
+
+.userlist-title {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 2px 10px 10px;
+}
+
+.users-avatar {
+    width: 60px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+.userlist-logo {
+    width: 60px;
+    height: 40px;
+}
+
+.users-list-pagination {
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.userslist-btn {
+    padding: 8px;
+    background-color: #0066cc;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    text-align: center;
+}
+
+.userslist-btn:hover {
+    background-color: #1e1e6a;
+    cursor: pointer;
+}
+
+.change-password-page {
+    width: 75%;
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+    background-color: #fafbfb;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding-bottom: 20px;
+}
+
+.change-password-inner {
+    width: 95%;
+    margin: 0 auto;
+}
+
+.change-password-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+    border-bottom: dashed;
+    border-bottom-color: #698eac;
+}
+
+.users-role-row {
+    color: green;
+    border-bottom: dashed;
+    border-bottom-color: #2fa35e;
+}
+
+.users-btn-save {
+    padding: 6px 20px;
+    background-color: #0066cc;
+    border: none;
+    border-radius: 6px;
+    color: white;
+}
+
+.users-btn-save:hover {
+    background-color: #187fe6;
+    cursor: pointer;
+}
+
+.users-remove {
+    padding: 6px 20px;
+    background-color: #f6f7f8;
+    border: 1px solid gray;
+    border-radius: 6px;
+    color: #421c1c;
+}
+
+.userslist-btn-row {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.userslist-password {
+    width: 70%;
+    padding: 6px;
+    background-color: #0066cc;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    text-align: center;
+}
 
 
+.userslist-block {
+    width: 70%;
+    padding: 6px;
+    background-color: red;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    text-align: center;
+}
 
+.userslist-unblock {
+    width: 70%;
+    padding: 6px;
+    background-color: green;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    text-align: center;
+}
 
+.userslist-block-page {
+    width: 55%;
+    border: 1px solid #d0d5dd;
+    border-radius: 10px;
+    background-color: #fafbfb;
+    margin: 0 auto;
+    margin-top: 50px;
+    padding-bottom: 20px;
+}
+
+.userslist-block-inner {
+    width: 94%;
+    margin: 0 auto;
+    margin-top: 8px;
+}
+
+.userslist-block-title {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+
+.userslist-block-role {
+    color: green;
+    border-bottom: dashed;
+    border-bottom-color: #2fa35e;
+}
+
+.userslist-block-btn {
+    padding: 7px 15px;
+    background-color: red;
+    border-radius: 7px;
+    border: none;
+    text-align: center;
+    color: white;
+}
+
+.userslist-block-btn:hover {
+    background-color: #e40a0a;
+    cursor: pointer;
+}
+
+.userslist-unblock-btn {
+    padding: 7px 15px;
+    background-color: green;
+    border-radius: 7px;
+    border: none;
+    text-align: center;
+    color: white;
+}
+
+.userslist-unblock-btn:hover {
+    background-color: #039a03;
+    cursor: pointer;
+}
+
+.userslist-block-remove {
+    padding: 7px 15px;
+    border-radius: 7px;
+    border: 1px solid gray;
+    text-align: center;
+    color: gray;
+}
+
+.users-messages-inform {
+    width: 230px;
+    height: 50px;
+    padding: 0px 5px 3px 5px;
+    background-color: green;
+    border-radius: 5px;
+    margin-top: 120px;
+    margin-left: 1200px;
+}
+
+.userslist-badge-active{
+    margin-left: 30px;
+}
+
+.userslist-badge-offline{
+    margin-left: 30px;
+}
+
+.userlist-badge-blocked{
+    margin-left: 30px;
+}
 

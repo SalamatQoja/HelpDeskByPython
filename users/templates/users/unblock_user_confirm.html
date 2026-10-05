@@ -1,0 +1,33 @@
+{% extends "users/admin_dashboard.html" %}
+
+{% load static %}
+{% block user_unblock_content %}
+
+<div class="userslist-block-page">
+    <div class="userslist-block-inner">
+        <div class="userslist-block-title">
+            <img src="{% static 'images/unblock-user.jpg' %}" alt="{{ target_user_block.username }}" class="user-avatar">
+            <h2>Разблокировать пользователя?</h2>
+        </div>
+        <hr style="width: 99%">
+        <p>
+            <img src="/static/images/register.jpg" style="height: 30px;"> Пользователь: <strong>{{ target_user.username }}</strong>
+            <strong class="userslist-block-role">{{ target_user.get_role_display }}</strong>
+        </p>
+        <p><img src="/static/images/email-logo.jpg" style="height: 25px">Email: {{ target_user.email }}</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="userslist-unblock-btn">Да, разаблокировать</button>
+            <a href="{% url 'users:users_list' %}" class="userslist-block-remove">Отмена</a>
+        </form>
+    </div>
+</div>
+{% if messages %}
+<div class="users-messages-inform">
+    {% for message in messages %}
+    <p class="{{ message.tags }}" style="color: white"><img src="{% static 'images/active-status.png' %}"
+                     alt="Онлайн" width="23" height="23"> {{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

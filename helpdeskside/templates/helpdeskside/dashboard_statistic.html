@@ -63,13 +63,13 @@
                 <h2 style="margin-left: 20px"><img src="/static/images/list4.png" style="height: 30px"> Последние заявки
                 </h2>
                 <div class="dashboard-latest-ticket-item">
-                    <img src="/static/images/search-images13 .png" style="height: 30px;">  <input type="text"
-                                                                                                placeholder="найти...."
-                                                                                                class="my-tickets-input">
+                    <img src="/static/images/search-images13 .png" style="height: 30px;"> <input type="text"
+                                                                                                 placeholder="найти...."
+                                                                                                 class="my-tickets-input">
                 </div>
             </div>
             <hr style="width: 96%">
-            <table border="1" cellpadding="8" class="dashboard-statistic-table">
+            <table cellpadding="10" class="dashboard-statistic-table">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -87,11 +87,19 @@
                     <td>{{ t.pk }}</td>
                     <td>{{ t.title }}</td>
                     <td>{{ t.author }}</td>
-                    <td>{{ t.get_status_display }}</td>
+                    <td class="status-cell">
+                        <img src="{% static 'images/statuses/' %}{{ t.status|lower }}.png"
+                             alt="{{ t.get_status_display }}"
+                             class="status-icon"
+                             title="{{ t.get_status_display }}"
+                             style="width: 35px" height="35px">
+                        {{ t.get_status_display }}
+                    </td>
                     <td>{{ t.get_priority_display }}</td>
                     <td>{{ t.created|date:"d.m.Y H:i" }}</td>
                     <td style="width: 100px">
-                        <a href="{% url 'helpdeskside:employee_ticket_detail' t.pk %}" class="dashboard-latest-ticket-open">Открыть</a>
+                        <a href="{% url 'helpdeskside:employee_ticket_detail' t.pk %}"
+                           class="dashboard-latest-ticket-open">Открыть</a>
                     </td>
                 </tr>
                 {% empty %}

@@ -17,7 +17,6 @@ class TicketAdmin(admin.ModelAdmin):
     date_hierarchy = 'created'
 
 
-# ========== COMMENT ==========
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['ticket', 'author', 'created', 'short_text']
@@ -29,7 +28,6 @@ class CommentAdmin(admin.ModelAdmin):
         return obj.text[:50] + ('…' if len(obj.text) > 50 else '')
 
 
-# ========== TICKET HISTORY ==========
 @admin.register(TicketHistory)
 class TicketHistoryAdmin(admin.ModelAdmin):
     list_display = ['ticket', 'field_changed', 'old_value', 'new_value', 'changed_by', 'changed_at']

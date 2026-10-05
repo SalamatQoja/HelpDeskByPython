@@ -7,8 +7,8 @@
     <h2 class="profile-title"><img src="/static/images/profile.jpg" style="height: 50px;"> Профиль</h2>
     <form method="post" enctype="multipart/form-data" class="profile-form">
         {% csrf_token %}
-        {% if user.photo.url %}
-        <p><img src="{{ user.photo.url}}" width="97%" height="270px"></p>
+        {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="{{ user.username }}" class="user-avatar">
         {% else %}
         <p><img src="{{ default_image }}"></p>
         {% endif %}

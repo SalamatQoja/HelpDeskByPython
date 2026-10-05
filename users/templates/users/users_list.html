@@ -1,0 +1,91 @@
+{% extends "users/admin_dashboard.html" %}
+
+{% load static %}
+{% block users_list_content %}
+
+<div class="userlist-page">
+    <div class="userlist-inner">
+        <div class="userlist-title">
+            <h2 class="all-tickets-title"><img src="/static/images/users.png" class="userlist-logo">Все пользователь
+            </h2>
+            <div class="my-tickets-search-row" style="margin-right: 25px">
+                <img src="/static/images/search-images13 .png" style="height: 30px;"><input type="text"
+                                                                                            placeholder="найти...."
+                                                                                            class="my-tickets-input">
+            </div>
+        </div>
+        <hr style="width: 96%">
+        <table cellpadding="9" style="width: 98%">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th></th>
+                <th>Логин</th>
+                <th>Email</th>
+                <th>Роль</th>
+                <th>Активен</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for u in page_obj %}
+            <tr>
+                <td>{{ u.pk }}</td>
+                <td style="width: 5%">{% if u.photo %}
+                    <img src="{{ u.photo.url }}" alt="{{ u.username }}" class="users-avatar">
+                    {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" alt="{{ u.username }}" class="user-avatar">
+                    {% endif %}
+                </td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.get_role_display }}</td>
+                <td>
+                    {% with status=u.get_status %}
+                    {% if status == 'online' %}
+                    <span class="userslist-badge-active">
+                <img src="{% static 'images/active-status.png' %}"
+                     alt="Онлайн" width="30" height="30">
+            </span>
+                    {% elif status == 'offline' %}
+                    <span class="userslist-badge-offline">
+                   <img src="{% static 'images/offline.png' %}" width="30" height="30">
+            </span>
+                    {% else %}
+                    <span class="userlist-badge-blocked">
+                <img src="{% static 'images/block-user.jpg' %}" width="30" height="30">
+            </span>
+                    {% endif %}
+                    {% endwith %}
+                </td>
+                <td style="width: 91%" class="userslist-btn-row">
+                    <a href="{% url 'users:change_user_password' u.pk %}" class="userslist-password">Изменить пароль</a>
+                    {% if u.is_active %}
+                    <a href="{% url 'users:block_user' u.pk %}" class="userslist-block">Заблокировать</a>
+                    {% else %}
+                    <a href="{% url 'users:unblock_user' u.pk %}" class="userslist-unblock">Разблокировать</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">Пользователей нет</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if page_obj.has_other_pages %}
+        <div class="users-list-pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="userslist-previous">Назад</a>
+            {% endif %}
+            <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

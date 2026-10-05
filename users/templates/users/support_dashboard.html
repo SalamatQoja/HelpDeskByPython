@@ -3,7 +3,6 @@
 {% load static %}
 {% block content %}
 
-
 <div class="employee-page">
     <header class="main-header-top-for-support">
         <nav class="navbar-for-support">
@@ -36,7 +35,7 @@
     <main class="employee-page-inner">
         <aside class="employee-ticket-row">
             <div class="employee-ticket-row-inner">
-                <img src="/static/images/list4.png" style="height: 30px" class="employee-ticket-row-img">
+                <img src="/static/images/all-orders.png" style="height: 30px" class="employee-ticket-row-img">
                 <a href="{% url 'helpdeskside:all_tickets' %}" class="employee-ticket-url">Все заявка</a>
             </div>
             <a href="{% url 'helpdeskside:history_tickets' %}" class="history-ticket-url">
@@ -65,6 +64,9 @@
             </section>
             <section class="dashboard-content">
                 {% block history_content %}{% endblock %}
+            </section>
+            <section class="dashboard-content">
+                {% block dashboard_content %}{% endblock %}
             </section>
             <section class="dashboard-content">
                 {% block profile_content %}{% endblock %}

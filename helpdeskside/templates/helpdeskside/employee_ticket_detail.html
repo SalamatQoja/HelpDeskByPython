@@ -65,9 +65,7 @@
 
         <h3><img src="/static/images/pencil.png" class="create-pencil">Комментарии</h3>
         {% for c in comments %}
-        <p class="user-comment"><strong><img src="/static/images/register.jpg" class="create-pencil"> {{
-            c.author.username
-            }}:</strong> {{ c.text }} <strong>{{ c.created|date:"d.m.Y H:i" }}</strong></p>
+        <p class="user-comment"><strong><img src="/static/images/register.jpg" class="create-pencil"> {{ c.author.username }}:</strong> {{ c.text }} <strong>{{ c.created|date:"d.m.Y H:i" }}</strong></p>
         {% empty %}
         <p>Комментариев пока нет</p>
         {% endfor %}

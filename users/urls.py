@@ -33,4 +33,8 @@ urlpatterns = (
     path('admin-panel/', views.admin_dashboard, name='admin_dashboard'),
     path('support/', views.support_dashboard, name='support_dashboard'),
     path('cabinet/', views.client_dashboard, name='client_dashboard'),
+    path('users-list/', views.users_list, name='users_list'),
+    path('users-list/<int:user_id>/', views.change_user_password, name='change_user_password'),
+    path('users/<int:user_id>/block/', views.block_user, name='block_user'),
+    path('users/<int:user_id>/unblock/', views.unblock_user, name='unblock_user'),
 )
